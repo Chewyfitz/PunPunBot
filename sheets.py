@@ -56,26 +56,42 @@ class GoogleSheet():
             self.users[row[0]] = self.max
         # print("self.users: {}".format(self.users))
         # print("self.max: {}".format(self.max))
-        
+    
+
+    # Add a new row to the spreadsheet
     def addUser(self, name: str):
+        # Keep track of the number of users, and add the current user to the row map
         self.max = self.max +1
         self.users[name] = self.max
+
+        # Set the cell reference, and cell value
         cell = "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.users[name])
         body = {"values": [[ name ]]}
 
+        # Create the update action
         req = self.sheet.values().update(spreadsheetId=self.spreadsheet, range=cell, valueInputOption='USER_ENTERED', body=body)
+
+        # Commit the action
         req.execute()
 
     
     def sleepTime(self, name: str, time: str, year:int, month: int, day: int):
+        # Update the year and month
         self.year = year
         self.month = month
+
+        # Add user if not already participating
         if name not in self.users:
             self.addUser(name)
+
+        # Set cell reference
         cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.users[name])
-
-        body = {"values": [[ "{}:{}".format(time.hour, time.minute) ]]}
-
+        # Set cell value
+        body = {"values": [[ "{}:{:02d}".format(time.hour, time.minute) ]]}
+        # Create update action
         req = self.sheet.values().update(spreadsheetId=self.spreadsheet, range=cell, valueInputOption='USER_ENTERED', body=body)
+        # Commit the action
         req.execute()
+
+        # Log sleep time to STDOUT
         print("Set sleep time for {} to {}".format(name, "{}:{}".format(time.hour, time.minute)))
