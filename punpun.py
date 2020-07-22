@@ -12,10 +12,6 @@ class PunPun(discord.Client):
 
         self.varStore = varstore
 
-        self.emoji = varstore['emoji']
-        self.prefix = varstore['prefix']
-        self.cutoffHour = varstore['cutoffHour']
-
         self.sheets = sheets.GoogleSheet(GSID=varstore['googleSheetID']) #add Year and Month to this
         self.sheets.startService()
 
@@ -49,7 +45,7 @@ class PunPun(discord.Client):
         #don't respond to self
         if message.author == self.user:
             return
-        if not message.content.startswith(self.prefix):
+        if not message.content.startswith(self.varStore['prefix']):
             return
         else:
             cmd = message.content.split(' ', 1)[0]
