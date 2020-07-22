@@ -3,30 +3,25 @@ import sheets
 import json
 from datetime import datetime, timezone, date
 
-
 class PunPun(discord.Client):
-    def __init__(self, emoji='\ud83d\udc4d', prefix='.', cutoffHour=12, googleSheetID='.'):
+    def __init__(self, varstore=None):
         super().__init__()
-        self.emoji = emoji
-        self.prefix = prefix
-        self.cutoffHour = cutoffHour
-        self.sheets = sheets.GoogleSheet(GSID=googleSheetID)
+
+        if varstore == None:
+            sys.exit("Error: vars.json not loaded. Please create a vars.json file and put it in this directory.")
+
+        self.varStore = varstore
+
+        self.emoji = varstore['emoji']
+        self.prefix = varstore['prefix']
+        self.cutoffHour = varstore['cutoffHour']
+
+        self.sheets = sheets.GoogleSheet(GSID=varstore['googleSheetID']) #add Year and Month to this
         self.sheets.startService()
 
     def updatevar(self, variable: str, value):
-        if variable == "emoji":
-            self.emoji = value
-        if variable == "prefix":
-            self.prefix = value
-        if variable == "cutoff":
-            self.cutoffHour = value
-        self.saveVars()
-    
-    def saveVars(self):
-        json_dump = json.dumps({"emoji": self.emoji, "prefix": self.prefix, "cutoffHour": self.cutoffHour})
-        f = open("vars.json", "w")
-        f.write(json_dump)
-        f.close()
+        self.varStore.updatevar(variable, value)
+        self.varStore.saveVars()
 
     async def on_ready(self):
         print("Logged in as", self.user)
@@ -34,7 +29,7 @@ class PunPun(discord.Client):
     def sleepTime(self, user: str, time):
         now = datetime.now()
         print("now: {}".format(now))
-        if now.time() < now.replace(hour=self.cutoffHour, minute=0, second=0, microsecond=0).time():
+        if now.time() < now.replace(hour=self.varStore['cutoffHour'], minute=0, second=0, microsecond=0).time():
             day = now.day-1
         else:
             day = now.day
@@ -67,9 +62,9 @@ class PunPun(discord.Client):
         if cmd.startswith("setcutoff"):
             cutoff = message.content.split(' ', 1)[1]
             self.updatevar('cutoff', cutoff)
-            await message.channel.send("Set cutoff hour to {}".format(self.cutoffHour))
+            await message.channel.send("Set cutoff hour to {}".format(self.varStore['cutoffHour']))
         if cmd == "goodnight":
             self.sleepTime("{}#{}".format(message.author.name, message.author.discriminator), message.created_at.time())
-            await message.add_reaction(self.emoji)
-        if cmd == "ping":
-            await message.channel.send("pong")
+            await message.add_reaction(self.varStore['emoji'])
+        # if cmd == "ping":
+        #     await message.channel.send("pong")
