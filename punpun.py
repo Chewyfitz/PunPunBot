@@ -1,10 +1,10 @@
 import discord
-import sheets
+import modules.sheets as sheets
 import json
 from datetime import datetime, timezone, date
 
 class PunPun(discord.Client):
-    def __init__(self, varstore=None):
+    def __init__(self, varstore=None, cmdTree={}):
         super().__init__()
 
         if varstore == None:
