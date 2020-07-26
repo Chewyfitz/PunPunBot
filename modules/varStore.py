@@ -59,6 +59,9 @@ class Store():
 	def __getitem__(self, var: str):
 		return self.__sStore[var]
 
+	def __eq__(self, obj):
+		return type(self) == type(obj)
+
 	def loadVars(self):
 		self.__sStore.loadVars()
 

@@ -1,17 +1,55 @@
 # depends on varStore
-import varStore
+from .varStore import Store
 # depends on sheets
-import sheets
+from .sheets import GoogleSheet
 
-store = Store()
-sheets = sheets.GoogleSheet(GSID=store['googleSheetID']) #add Year and Month to this
-sheets.startService()
+sheets = None
 
-def goodnight(msg):
-	print("Goodnight")
+store = None
 
-def setemoji(msg):
-	print("Set Emoji")
+def __initStore():
+	if not store:
+		store = Store()
 
-def setcutoff(msg):
-	print("Set cutoff")
+def __initSheets():
+	if not sheets:
+		sheets = GoogleSheet(GSID=store['googleSheetID']) #add Year and Month to this
+		sheets.startService()
+
+async def goodnight(args: str, msg):
+	__initStore()
+	__initSheets()
+	user = "{}#{}".format(message.author.name, message.author.discriminator)
+	time = message.created_at.time()
+
+    now = datetime.now()
+    print("now: {}".format(now))
+    if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
+        day = now.day-1
+    else:
+        day = now.day
+    
+    dt = datetime.combine(date.today(), time).replace(tzinfo=timezone.utc).astimezone(tz=None)
+    time = dt.time()
+
+    # print("user: {}".format(user))
+    # print("time: {}".format(time))
+    # print("now.year: {}".format(now.year))
+    # print("now.month: {}".format(now.month))
+    # print("day: {}".format(day))
+
+    sheets.sleepTime(user, time, now.year, now.month, day)
+   	await message.add_reaction(store['emoji'])
+
+async def setemoji(args: str, msg):
+	# emoji = msg.content.split(' ', 1)[1]
+	store.updateVar('emoji', args)
+	await message.channel.send("Set emoji to {}".format(str(emoji)))
+
+async def setcutoff(args: str, msg):
+	# cutoff = message.content.split(' ', 1)[1]
+	store.updateVar('cutoff', args)
+    await message.channel.send("Set cutoff hour to {}".format(store['cutoffHour']))
+
+async def ping(args: str, msg):
+	await msg.channel.send("pong")

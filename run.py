@@ -21,9 +21,9 @@ varStore.loadVars()
 # Generate the command parsing tree
 # TEMPORARILY DEFINED AS A STATIC TREE DURING DEVELOPMENT
 # WILL BE MODIFIED TO GENERATE PROGRAMMATICALLY
-cmdTree = {'goodnight': goodnight()
-		  ,'setemoji': setemoji()
-		  ,'setcutoff': setcutoff()
+cmdTree = {'goodnight': goodnight
+		  ,'setemoji': setemoji
+		  ,'setcutoff': setcutoff
 		  }
 
 # Create the client object and pass in the variable store
