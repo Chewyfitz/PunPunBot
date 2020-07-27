@@ -19,37 +19,37 @@ def __initSheets():
 async def goodnight(args: str, msg):
 	__initStore()
 	__initSheets()
-	user = "{}#{}".format(message.author.name, message.author.discriminator)
-	time = message.created_at.time()
+	user = "{}#{}".format(msg.author.name, msg.author.discriminator)
+	time = msg.created_at.time()
 
-    now = datetime.now()
-    print("now: {}".format(now))
-    if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
-        day = now.day-1
-    else:
-        day = now.day
-    
-    dt = datetime.combine(date.today(), time).replace(tzinfo=timezone.utc).astimezone(tz=None)
-    time = dt.time()
+	now = datetime.now()
+	print("now: {}".format(now))
+	if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
+		day = now.day-1
+	else:
+		day = now.day
+	
+	dt = datetime.combine(date.today(), time).replace(tzinfo=timezone.utc).astimezone(tz=None)
+	time = dt.time()
 
-    # print("user: {}".format(user))
-    # print("time: {}".format(time))
-    # print("now.year: {}".format(now.year))
-    # print("now.month: {}".format(now.month))
-    # print("day: {}".format(day))
+	# print("user: {}".format(user))
+	# print("time: {}".format(time))
+	# print("now.year: {}".format(now.year))
+	# print("now.month: {}".format(now.month))
+	# print("day: {}".format(day))
 
-    sheets.sleepTime(user, time, now.year, now.month, day)
-   	await message.add_reaction(store['emoji'])
+	sheets.sleepTime(user, time, now.year, now.month, day)
+	await msg.add_reaction(store['emoji'])
 
 async def setemoji(args: str, msg):
 	# emoji = msg.content.split(' ', 1)[1]
 	store.updateVar('emoji', args)
-	await message.channel.send("Set emoji to {}".format(str(emoji)))
+	await msg.channel.send("Set emoji to {}".format(str(emoji)))
 
 async def setcutoff(args: str, msg):
-	# cutoff = message.content.split(' ', 1)[1]
+	# cutoff = msg.content.split(' ', 1)[1]
 	store.updateVar('cutoff', args)
-    await message.channel.send("Set cutoff hour to {}".format(store['cutoffHour']))
+	await msg.channel.send("Set cutoff hour to {}".format(store['cutoffHour']))
 
 async def ping(args: str, msg):
 	await msg.channel.send("pong")
