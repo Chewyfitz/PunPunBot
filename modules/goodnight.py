@@ -8,10 +8,12 @@ sheets = None
 store = None
 
 def __initStore():
+	global store
 	if not store:
 		store = Store()
 
 def __initSheets():
+	global sheets
 	if not sheets:
 		sheets = GoogleSheet(GSID=store['googleSheetID']) #add Year and Month to this
 		sheets.startService()
