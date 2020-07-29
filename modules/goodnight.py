@@ -45,11 +45,13 @@ async def goodnight(args: str, msg):
 	await msg.add_reaction(store['emoji'])
 
 async def setemoji(args: str, msg):
-	# emoji = msg.content.split(' ', 1)[1]
+	__initStore()
+	emoji = args.split(' ', 1)[1]
 	store.updateVar('emoji', args)
 	await msg.channel.send("Set emoji to {}".format(str(emoji)))
 
 async def setcutoff(args: str, msg):
+	__initStore()
 	# cutoff = msg.content.split(' ', 1)[1]
 	store.updateVar('cutoff', args)
 	await msg.channel.send("Set cutoff hour to {}".format(store['cutoffHour']))
