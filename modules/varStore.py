@@ -39,10 +39,10 @@ class Store():
 				self.varFile = open(self.path, "r+")
 
 			# Generate a JSON dump
-			self.rawJson = json.dumps(json)
+			self.rawJson = json.dumps(self.json)
 
 			# Write the JSON dump to disk
-			self.varFile.write(json_dump)
+			self.varFile.write(self.rawJson)
 
 		def updateVar(self, var: str, val: str):
 			# Update a var
