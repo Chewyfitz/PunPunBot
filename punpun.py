@@ -36,4 +36,4 @@ class PunPun(discord.Client):
 		await self.cmdTree[cmd.split(' ', 1)[0]](args=args, msg=message)
 
 	async def on_member_join(self, member):
-		await self.get_channel(self.varStore['welcomeChannel']).send("Welcome, {}, to the AMC discord server. Enjoy your stay and introduce yourself to the others! Also please do read the rules in the {} channel.".format(member.mention, get_channel(415863356625387520).mention))
+		await Client.get_channel(self.varStore['welcomeChannel']).send("Welcome, {}, to the AMC discord server. Enjoy your stay and introduce yourself to the others! Also please do read the rules in the {} channel.".format(member.mention, Client.get_channel(415863356625387520).mention))
