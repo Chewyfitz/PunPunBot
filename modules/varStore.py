@@ -42,6 +42,7 @@ class Store():
 			self.rawJson = json.dumps(self.json)
 
 			# Write the JSON dump to disk
+			self.varFile.seek(0)
 			self.varFile.write(self.rawJson)
 
 		def updateVar(self, var: str, val: str):
