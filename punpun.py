@@ -29,8 +29,11 @@ class PunPun(discord.Client):
 		else:
 			cmd = message.content.split(' ', 1)[0]
 			cmd = cmd[1:]
-		
-		args = cmd.split(' ', 1)[1]
+		args = message.content.split(' ', 1)
+		if len(args) > 1:
+			args = args[1]
+		else:
+			args = ''
 		cmdTree[cmd.split(' ', 1)[0]](args=args, msg=message)
 
 	async def on_member_join(self, member):
