@@ -46,7 +46,7 @@ async def goodnight(args: str, msg):
 
 async def setemoji(args: str, msg):
 	__initStore()
-	emoji = args.split(' ', 1)[1]
+	emoji = args.split(' ', 1)[0]
 	store.updateVar('emoji', args)
 	await msg.channel.send("Set emoji to {}".format(str(emoji)))
 
