@@ -42,7 +42,8 @@ class GoogleSheet():
         self.service = build('sheets', 'v4', credentials=creds)
         # Call the Sheets API
         self.sheet = self.service.spreadsheets()
-        request = self.sheet.values().get(spreadsheetId=self.spreadsheet, range='{}-{:02d}!A1:A'.format(self.year, self.month))
+        # request = self.sheet.values().get(spreadsheetId=self.spreadsheet, range='{}-{:02d}!A1:A'.format(self.year, self.month))
+        request = self.sheet.values().get(spreadsheetId=self.spreadsheet, range='usermap!A1:B'.format(self.year, self.month))
         response = request.execute()
 
         # Get the list of user names and their corresponding row numbers
@@ -53,20 +54,22 @@ class GoogleSheet():
             self.max = self.max+1
             if(self.max < 2):
                 continue
-            self.users[row[0]] = self.max
+            self.uids[row[0]] = self.max
+            self.users[row[1]] = self.max
         # print("self.users: {}".format(self.users))
         # print("self.max: {}".format(self.max))
     
 
     # Add a new row to the spreadsheet
-    def addUser(self, name: str):
+    def addUser(self, uid: str, userName: str):
         # Keep track of the number of users, and add the current user to the row map
         self.max = self.max +1
-        self.users[name] = self.max
+        self.uids[uid] = self.max
+        self.users[userName] = self.max
 
         # Set the cell reference, and cell value
-        cell = "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.users[name])
-        body = {"values": [[ name ]]}
+        cell = "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.users[uid])
+        body = {"values": [[ uid ]]}
 
         # Create the update action
         req = self.sheet.values().update(spreadsheetId=self.spreadsheet, range=cell, valueInputOption='USER_ENTERED', body=body)
@@ -74,18 +77,22 @@ class GoogleSheet():
         # Commit the action
         req.execute()
 
+        # Add user to usermap
+        req = self.sheet.values().update(spreadsheetId=self.spreadsheet, range="usermap!A{}:B{}".format(self.users[uid], self.users[uid]), valueInputOption='USER_ENTERED', body={"values": [[ uid ], [ userName ]]})
+        req.execute()
+
     
-    def sleepTime(self, name: str, time: str, year:int, month: int, day: int):
+    def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
         # Update the year and month
         self.year = year
         self.month = month
 
         # Add user if not already participating
-        if name not in self.users:
-            self.addUser(name)
+        if author.id not in self.uids:
+            self.addUser(author.id, userName)
 
         # Set cell reference
-        cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.users[name])
+        cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.uids[author.id])
         # Set cell value
         body = {"values": [[ "{}:{:02d}".format(time.hour, time.minute) ]]}
         # Create update action
@@ -94,4 +101,4 @@ class GoogleSheet():
         req.execute()
 
         # Log sleep time to STDOUT
-        print("Set sleep time for {} to {}".format(name, "{}:{}".format(time.hour, time.minute)))
+        print("Set sleep time for {} to {}".format(author.id, "{}:{}".format(time.hour, time.minute)))

@@ -22,13 +22,21 @@ def __initSheets():
 async def goodnight(args: str, msg):
 	__initStore()
 	__initSheets()
-	user = "{}#{}".format(msg.author.name, msg.author.discriminator)
+	userName = "{}#{}".format(msg.author.name, msg.author.discriminator)
+	user = msg.author.id
 	time = msg.created_at.time()
 
 	now = datetime.now()
+	month = now.month
+	year = now.year
 	print("now: {}".format(now))
 	if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
 		day = now.day-1
+		if day == 0:
+			month = month - 1
+			if month == 0:
+				month = 12
+				year = year - 1
 	else:
 		day = now.day
 	
@@ -41,7 +49,7 @@ async def goodnight(args: str, msg):
 	# print("now.month: {}".format(now.month))
 	# print("day: {}".format(day))
 
-	sheets.sleepTime(user, time, now.year, now.month, day)
+	sheets.sleepTime(author=msg.author, userName=userName, time, year, month, day)
 	await msg.add_reaction(store['emoji'])
 
 async def setemoji(args: str, msg):
