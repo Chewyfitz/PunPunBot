@@ -73,11 +73,11 @@ class GoogleSheet():
             'valueInputOption': 'USER_ENTERED',
             'data': [
                 {   "range": "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.uids[uid]),
-                    "values": [ uid ]
+                    "values": [[ uid ]]
                 }, {"range": "usermap!A{}".format(self.uids[uid]),
-                    "values": [ uid ]
+                    "values": [[ uid ]]
                 }, {"range": "usermap!B{}".format(self.uids[uid]),
-                    "values": [ userName ]
+                    "values": [[ userName ]]
                 }
             ]
         }
