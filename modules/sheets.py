@@ -89,6 +89,9 @@ class GoogleSheet():
         self.year = year
         self.month = month
 
+        print(self.uids)
+        print(self.users)
+
         # Add user if not already participating
         if author.id not in self.uids:
             await self.addUser(author.id, userName)
