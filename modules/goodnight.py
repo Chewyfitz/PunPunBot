@@ -8,20 +8,20 @@ sheets = None
 
 store = None
 
-async def __initStore():
+def __initStore():
 	global store
 	if not store:
 		store = Store()
 
-async def __initSheets():
+def __initSheets():
 	global sheets
 	if not sheets:
 		sheets = GoogleSheet(GSID=store['googleSheetID']) #add Year and Month to this
 		sheets.startService()
 
 async def goodnight(args: str, msg):
-	await __initStore()
-	await __initSheets()
+	__initStore()
+	__initSheets()
 	userName = "{}#{}".format(msg.author.name, msg.author.discriminator)
 	user = msg.author.id
 	time = msg.created_at.time()

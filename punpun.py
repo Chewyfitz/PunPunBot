@@ -33,11 +33,11 @@ class PunPun(discord.Client):
 			args = args[1]
 		else:
 			args = ''
-		await self.cmdTree[cmd.split(' ', 1)[0]](args=args, msg=message)
-		# try:
-		# 	await self.cmdTree[cmd.split(' ', 1)[0]](args=args, msg=message)
-		# except KeyError:
-		# 	print("KeyError: {}".format(str(cmd.split(' ', 1)[0])))
+		
+		try:
+			await self.cmdTree[cmd.split(' ', 1)[0]](args=args, msg=message)
+		except KeyError:
+			print("KeyError: {}".format(str(cmd.split(' ', 1)[0])))
 
 
 	async def on_member_join(self, member):

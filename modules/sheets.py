@@ -91,9 +91,6 @@ class GoogleSheet():
 
         aid = str(author.id)
 
-        print(self.uids)
-        print(self.users)
-
         # Add user if not already participating
         if aid not in self.uids:
             await self.addUser(aid, userName)
