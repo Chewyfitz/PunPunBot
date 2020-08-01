@@ -69,25 +69,23 @@ class GoogleSheet():
         self.users[userName] = self.max
 
         # Set the cell reference, and cell value
-        cell = "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.users[uid])
-        body = {"values": [[ uid ]]}
+        batch_update_request_body = {
+            'valueInputOption': 'USER_ENTERED',
+            'data': [
+                {   "range": "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.users[uid]),
+                    "values": [[ uid ]]
+                }, {"range": "usermap!A{}:B{}".format(self.users[uid], self.users[uid]),
+                    "values": [[ uid, userName ]]
+                }
+            ]
+        }
 
         # Create the update action
-        req = self.sheet.values().update(spreadsheetId=self.spreadsheet, range=cell, valueInputOption='USER_ENTERED', body=body)
+        req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=body)
 
         # Commit the action
         res = req.execute()
         print(res)
-
-        # Set cell reference and cell values for usermap
-        cell2 = "usermap!A{}:B{}".format(self.users[uid], self.users[uid])
-        body2 = {"values": [[ uid, userName ]]}
-
-        # Add user to usermap
-        req2 = self.sheet.values().update(spreadsheetId=self.spreadsheet, range=cell2, valueInputOption='USER_ENTERED', body=body2)
-        res2 = req2.execute()
-        print(res2)
-
     
     def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
         # Update the year and month
