@@ -83,7 +83,7 @@ class GoogleSheet():
         }
         print(2)
         # Create the update action
-        req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=body)
+        req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=batch_update_request_body)
         print(3)
         # Commit the action
         res = await req.execute()
