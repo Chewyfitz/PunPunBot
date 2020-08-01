@@ -62,7 +62,7 @@ class GoogleSheet():
     
 
     # Add a new row to the spreadsheet
-    def addUser(self, uid: str, userName: str):
+    async def addUser(self, uid: str, userName: str):
         # Keep track of the number of users, and add the current user to the row map
         self.max = self.max +1
         self.uids[uid] = self.max
@@ -87,14 +87,16 @@ class GoogleSheet():
         res = req.execute()
         print(res)
     
-    def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
+    async def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
         # Update the year and month
         self.year = year
         self.month = month
 
+        print(self.uids)
+
         # Add user if not already participating
         if author.id not in self.uids:
-            self.addUser(author.id, userName)
+            await self.addUser(author.id, userName)
 
         # Set cell reference
         cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.uids[author.id])
