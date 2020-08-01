@@ -67,41 +67,36 @@ class GoogleSheet():
         self.max = self.max +1
         self.uids[uid] = self.max
         self.users[userName] = self.max
-
         # Set the cell reference, and cell value
         batch_update_request_body = {
-            'valueInputOption': 'USER_ENTERED',
+            'valueInputOption': 'RAW',
             'data': [
-                {   "range": "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.users[uid]),
-                    "values": [ uid ]
-                }, {"range": "usermap!A{}".format(self.users[uid]),
-                    "values": [ uid ]
-                }, {"range": "usermap!B{}".format(self.users[uid]),
-                    "values": [ userName ]
+                {   "range": "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.uids[uid]),
+                    "values": [[ uid ]]
+                }, {"range": "usermap!A{}:B{}".format(self.uids[uid], self.uids[uid]),
+                    "values": [[ uid , userName]]
                 }
             ]
         }
-
         # Create the update action
-        req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=body)
-
+        req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=batch_update_request_body)
         # Commit the action
-        res = await req.execute()
-        print(res)
+        res = req.execute()
+        # print(res)
     
     async def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
         # Update the year and month
         self.year = year
         self.month = month
 
-        print(self.uids)
+        aid = str(author.id)
 
         # Add user if not already participating
-        if author.id not in self.uids:
-            await self.addUser(author.id, userName)
+        if aid not in self.uids:
+            await self.addUser(aid, userName)
 
         # Set cell reference
-        cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.uids[author.id])
+        cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.uids[aid])
         # Set cell value
         body = {"values": [[ "{}:{:02d}".format(time.hour, time.minute) ]]}
         # Create update action
@@ -110,4 +105,4 @@ class GoogleSheet():
         req.execute()
 
         # Log sleep time to STDOUT
-        print("Set sleep time for {} to {}".format(author.id, "{}:{}".format(time.hour, time.minute)))
+        print("Set sleep time for {} to {}".format(aid, "{}:{}".format(time.hour, time.minute)))
