@@ -74,8 +74,10 @@ class GoogleSheet():
             'data': [
                 {   "range": "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.users[uid]),
                     "values": [[ uid ]]
-                }, {"range": "usermap!A{}:B{}".format(self.users[uid], self.users[uid]),
-                    "values": [[ uid, userName ]]
+                }, {"range": "usermap!A{}".format(self.users[uid]),
+                    "values": [[ uid ]]
+                }, {"range": "usermap!B{}".format(self.users[uid]),
+                    "values": [[ userName ]]
                 }
             ]
         }
@@ -84,7 +86,7 @@ class GoogleSheet():
         req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=body)
 
         # Commit the action
-        res = req.execute()
+        res = await req.execute()
         print(res)
     
     async def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
