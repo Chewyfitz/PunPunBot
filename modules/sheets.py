@@ -89,15 +89,17 @@ class GoogleSheet():
         self.year = year
         self.month = month
 
+        aid = str(author.id)
+
         print(self.uids)
         print(self.users)
 
         # Add user if not already participating
-        if author.id not in self.uids:
-            await self.addUser(author.id, userName)
+        if aid not in self.uids:
+            await self.addUser(aid, userName)
 
         # Set cell reference
-        cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.uids[author.id])
+        cell = "{}-{:02d}!{}{}".format(self.year, self.month, self.dayMap[day], self.uids[aid])
         # Set cell value
         body = {"values": [[ "{}:{:02d}".format(time.hour, time.minute) ]]}
         # Create update action
@@ -106,4 +108,4 @@ class GoogleSheet():
         req.execute()
 
         # Log sleep time to STDOUT
-        print("Set sleep time for {} to {}".format(author.id, "{}:{}".format(time.hour, time.minute)))
+        print("Set sleep time for {} to {}".format(aid, "{}:{}".format(time.hour, time.minute)))
