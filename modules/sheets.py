@@ -67,27 +67,21 @@ class GoogleSheet():
         self.max = self.max +1
         self.uids[uid] = self.max
         self.users[userName] = self.max
-        print(1)
         # Set the cell reference, and cell value
         batch_update_request_body = {
-            'valueInputOption': 'USER_ENTERED',
+            'valueInputOption': 'RAW',
             'data': [
                 {   "range": "{}-{:02d}!{}{}".format(self.year, self.month, 'A', self.uids[uid]),
                     "values": [[ uid ]]
-                }, {"range": "usermap!A{}".format(self.uids[uid]),
-                    "values": [[ uid ]]
-                }, {"range": "usermap!B{}".format(self.uids[uid]),
-                    "values": [[ userName ]]
+                }, {"range": "usermap!A{}:B{}".format(self.uids[uid], self.uids[uid]),
+                    "values": [[ uid , userName]]
                 }
             ]
         }
-        print(2)
         # Create the update action
         req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=batch_update_request_body)
-        print(3)
         # Commit the action
         res = req.execute()
-        print(4)
         print(res)
     
     async def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
