@@ -78,9 +78,13 @@ class GoogleSheet():
         # Commit the action
         req.execute()
 
+        # Set cell reference and cell values for usermap
+        cell2 = "usermap!A{}:B{}".format(self.users[uid], self.users[uid])
+        body2 = {"values": [[ uid, userName ]]}
+
         # Add user to usermap
-        req = self.sheet.values().update(spreadsheetId=self.spreadsheet, range="usermap!A{}:B{}".format(self.users[uid], self.users[uid]), valueInputOption='USER_ENTERED', body={"values": [[ uid ], [ userName ]]})
-        req.execute()
+        req2 = self.sheet.values().update(spreadsheetId=self.spreadsheet, range=cell2, valueInputOption='USER_ENTERED', body=body2)
+        req2.execute()
 
     
     def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
