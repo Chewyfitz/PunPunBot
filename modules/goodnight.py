@@ -49,7 +49,7 @@ async def goodnight(args: str, msg):
 	# print("now.month: {}".format(now.month))
 	# print("day: {}".format(day))
 
-	sheets.sleepTime(author=msg.author, userName=userName, time, year, month, day)
+	sheets.sleepTime(msg.author, userName, time, year, month, day)
 	await msg.add_reaction(store['emoji'])
 
 async def setemoji(args: str, msg):
