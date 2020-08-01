@@ -49,6 +49,7 @@ class GoogleSheet():
         # Get the list of user names and their corresponding row numbers
         # (this is a spreadsheet so it can be manually updated, but I'd recommend against that)
         self.users = {}
+        self.uids = {}
         self.max = 0
         for row in response['values']:
             self.max = self.max+1
