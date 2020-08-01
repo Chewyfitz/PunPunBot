@@ -82,14 +82,12 @@ class GoogleSheet():
         req = self.sheet.values().batchUpdate(spreadsheetId=self.spreadsheet, body=batch_update_request_body)
         # Commit the action
         res = req.execute()
-        print(res)
+        # print(res)
     
     async def sleepTime(self, author: str, userName: str, time: str, year:int, month: int, day: int):
         # Update the year and month
         self.year = year
         self.month = month
-
-        print(self.uids)
 
         # Add user if not already participating
         if author.id not in self.uids:
