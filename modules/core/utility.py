@@ -11,7 +11,6 @@ def export(func):
       http://groups.google.com/group/comp.lang.python/msg/3d400fb22d8a42e1
     """
 	mod = _sys.modules[func.__module__]
-	functions[func.__name__] = func
 	if(hasattr(mod, '__all__')):
 		name = func.__name__
 		all_ = mod.__all__
