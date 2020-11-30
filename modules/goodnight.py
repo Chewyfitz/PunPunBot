@@ -27,12 +27,12 @@ async def goodnight(args: str, msg):
 	time = msg.created_at.time()
 
 	now = datetime.now()
-    print("now: {}".format(now))
-    if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
-        now = now - timedelta(days=1)
-    day = now.day
-    month = now.month
-    year = now.year
+	print("now: {}".format(now))
+	if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
+		now = now - timedelta(days=1)
+	day = now.day
+	month = now.month
+	year = now.year
 	
 	dt = datetime.combine(date.today(), time).replace(tzinfo=timezone.utc).astimezone(tz=None)
 	time = dt.time()
