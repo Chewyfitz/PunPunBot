@@ -2,7 +2,7 @@
 from .varStore import Store
 # depends on sheets
 from .sheets import GoogleSheet
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone, date, timedelta
 
 sheets = None
 
@@ -27,18 +27,12 @@ async def goodnight(args: str, msg):
 	time = msg.created_at.time()
 
 	now = datetime.now()
-	month = now.month
-	year = now.year
-	print("now: {}".format(now))
-	if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
-		day = now.day-1
-		if day == 0:
-			month = month - 1
-			if month == 0:
-				month = 12
-				year = year - 1
-	else:
-		day = now.day
+    print("now: {}".format(now))
+    if now.time() < now.replace(hour=store['cutoffHour'], minute=0, second=0, microsecond=0).time():
+        now = now - timedelta(days=1)
+    day = now.day
+    month = now.month
+    year = now.year
 	
 	dt = datetime.combine(date.today(), time).replace(tzinfo=timezone.utc).astimezone(tz=None)
 	time = dt.time()
