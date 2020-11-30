@@ -1,22 +1,21 @@
-import sys as _sys
+from .export import export
+import datetime
+import discord
 
-functions = {}
+@export
+async def unroll(args, msg):
+    list = []
+    m=msg
+    list.append(m)
+    while(m.reference):
+        m = (await m.channel.fetch_message(m.reference.message_id))
+        list.append(m)
+    list.reverse()
 
-def export(func):
-	"""Use a decorator to avoid retyping function/class names.
+    embed = discord.Embed(title="Unrolled Thread", colour=discord.Colour(0xa3de23), timestamp=datetime.datetime.now(datetime.timezone.utc))
 
-    * Based on an idea by Duncan Booth:
-      http://groups.google.com/group/comp.lang.python/msg/11cbb03e09611b8a
-    * Improved via a suggestion by Dave Angel:
-      http://groups.google.com/group/comp.lang.python/msg/3d400fb22d8a42e1
-    """
-	mod = _sys.modules[func.__module__]
-	if(hasattr(mod, '__all__')):
-		name = func.__name__
-		all_ = mod.__all__
-		if name not in all_:
-			all_.append(name)
-	else:
-		mod.__all__ = [func.__name__]
-	return func
+    for m in list:
+        embed.add_field(name=m.author, value=m.content, inline=False)
 
+    print(list)
+    await msg.channel.send(embed=embed)

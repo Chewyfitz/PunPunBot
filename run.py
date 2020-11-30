@@ -28,6 +28,7 @@ vs.loadVars()
 cmdTree = {'goodnight': goodnight.goodnight
 		  ,'setemoji': goodnight.setemoji
 		  ,'setcutoff': goodnight.setcutoff
+          ,'unroll': core.unroll
 		  }
 
 # Create the client object and pass in the variable store
