@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import discord
 from punpun import PunPun
 from modules.varStore import Store
@@ -22,6 +24,7 @@ varStore.loadVars()
 # TEMPORARILY DEFINED AS A STATIC TREE DURING DEVELOPMENT
 # WILL BE MODIFIED TO GENERATE PROGRAMMATICALLY
 cmdTree = {'goodnight': goodnight
+          ,'oyasumi': goodnight
 		  ,'setemoji': setemoji
 		  ,'setcutoff': setcutoff
 		  }

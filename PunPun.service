@@ -1,0 +1,16 @@
+[Unit]
+Description=PunPun Discord Bot
+After=network.target
+
+[Service]
+WorkingDirectory=/var/bot/PunPunBot/
+
+User=minecraft
+Group=minecraft
+
+Restart=on-success
+
+ExecStart=/usr/bin/screen -DmS PunPun /usr/bin/python3 run.py
+
+[Install]
+WantedBy=multi-user.target
