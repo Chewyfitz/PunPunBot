@@ -1,1 +1,1 @@
-from modules.test.foo import *
+

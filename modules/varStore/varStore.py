@@ -1,10 +1,8 @@
 import sys
 import json
 import os.path
-from modules.core import export
 
 # Store() class is just a wrapper for the singleton __Singleton_Store() class.
-@export
 class Store():
 	class __Singleton_Store():
 		def __init__(self, path:str = "vars.json"):
@@ -58,6 +56,8 @@ class Store():
 		# Skip loading a new file if we've already got one
 		if __sStore == None:
 			self.__class__.__sStore = self.__class__.__Singleton_Store(path)
+
+		self.loadVars()
 
 	def __getitem__(self, var: str):
 		return self.__sStore[var]

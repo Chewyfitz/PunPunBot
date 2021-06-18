@@ -8,6 +8,8 @@ from google.auth.transport.requests import Request
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
+__all__ = []
+
 class GoogleSheet():
     def __init__ (self, GSID:str, year:int =2020, month:int =7):
         self.dayMap = {

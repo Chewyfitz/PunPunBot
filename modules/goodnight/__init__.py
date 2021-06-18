@@ -1,1 +1,1 @@
-from modules.goodnight.goodnight import *
+from .goodnight import *

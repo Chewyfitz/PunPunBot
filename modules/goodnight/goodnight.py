@@ -1,7 +1,10 @@
+import asyncio
 # depends on varStore
-from .varStore import Store
+from ..varStore.varStore import Store
 # depends on sheets
-from .sheets import GoogleSheet
+from ..sheets.sheets import GoogleSheet
+from core.listen import subscribe
+
 from datetime import datetime, timezone, date, timedelta
 
 sheets = None
@@ -19,6 +22,7 @@ def __initSheets():
 		sheets = GoogleSheet(GSID=store['googleSheetID']) #add Year and Month to this
 		sheets.startService()
 
+@subscribe("command", cmd="goodnight", aliases=["oyasumi"])
 async def goodnight(args: str, msg):
 	__initStore()
 	__initSheets()
@@ -43,9 +47,11 @@ async def goodnight(args: str, msg):
 	# print("now.month: {}".format(now.month))
 	# print("day: {}".format(day))
 
-	await sheets.sleepTime(msg.author, userName, time, year, month, day)
-	await msg.add_reaction(store['emoji'])
+	googleSheets = sheets.sleepTime(msg.author, userName, time, year, month, day)
+	asyncio.ensure_future(googleSheets)
+	asyncio.ensure_future( msg.add_reaction(store['emoji']) )
 
+@subscribe("command", cmd="setemoji")
 async def setemoji(args: str, msg):
 	__initStore()
 	emoji = args.split(' ', 1)[0]
@@ -53,6 +59,7 @@ async def setemoji(args: str, msg):
 	store.saveVars()
 	await msg.channel.send("Set emoji to {}".format(str(emoji)))
 
+@subscribe("command", cmd="setcutoff")
 async def setcutoff(args: str, msg):
 	__initStore()
 	cutoff = args.split(' ', 1)[0]
@@ -60,5 +67,6 @@ async def setcutoff(args: str, msg):
 	store.saveVars()
 	await msg.channel.send("Set cutoff hour to {}".format(store['cutoffHour']))
 
+@subscribe("command", cmd="ping")
 async def ping(args: str, msg):
 	await msg.channel.send("pong")

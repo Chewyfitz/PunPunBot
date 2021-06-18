@@ -1,7 +1,7 @@
-from modules.core import export
+from ..core.export import export
 
 @export
-def foo(x):
+def foo_2(x):
 	print("Hello, " + x)
 
 def bar(x):
