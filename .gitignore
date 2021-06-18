@@ -3,3 +3,4 @@ temp.txt
 token.pickle
 vars.json
 __pycache__/
+*.service
