@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import discord
 import modules.sheets as sheets
 import json
