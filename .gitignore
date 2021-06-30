@@ -4,3 +4,4 @@ token.pickle
 vars.json
 __pycache__/
 *.service
+data/

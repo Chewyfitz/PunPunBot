@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  punpun:
+    build: .
+    links:
+      - database
+
+  database:
+    image: "neo4j:latest"
+    environment:
+      - neo4j_dbms_connector_bolt_advertised__address=:7000
+      - neo4j_auth=neo4j/test
+    ports:
+      - 7474:7474
+      - 7000:7000
+    volumes:
+      - ./data:/data
